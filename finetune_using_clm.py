@@ -230,8 +230,7 @@ def preprocess(cfg, accelerator, tokenizer, raw_datasets):
 
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
-#@PipelineDecorator.component(return_values=['model'], cache=True, task_type=TaskTypes.training)
-@PipelineDecorator.pipeline(name='Pipeline-Sc', project='TrainM', version='0.0.1')
+@PipelineDecorator.component(task_type=TaskTypes.training)
 def main(cfg: DictConfig):
 
     cfg = check_cfg_and_load_defaults(cfg)
@@ -483,7 +482,34 @@ def main(cfg: DictConfig):
         if accelerator.is_main_process:
             tokenizer.save_pretrained(cfg.output_dir)
 
+@PipelineDecorator.pipeline(name='Pipeline-Sc', project='TrainM', version='0.0.1')
+def executing_pipeline():
+    # cfg = check_cfg_and_load_defaults()
+    # print("cfg::",cfg)
+
+    # accelerator = create_accelerator()
+    # print("accelrator:",accelerator)
+
+    # raw_datasets = load_raw_datasets()
+    # print("raw_datasets::",raw_datasets)
+
+    # tokenizer, model = load_model_and_tokenizer()
+    # print("tokenizer::",tokenizer)
+    # print("model::",model)
+
+    # optimizer_grouped_parameters,lr = create_optimizer()
+    # print('optimizer_grouped_parameters::',optimizer_grouped_parameters)
+
+    # tokenized_datasets = preprocess()
+    # print('tokenized_datasets::',tokenized_datasets) 
+
+    main()
+    print('main-n function')
+
+
+
 
 if __name__ == "__main__":
     PipelineDecorator.set_default_execution_queue('default')
-    main()
+    executing_pipeline()
+    # main() 
