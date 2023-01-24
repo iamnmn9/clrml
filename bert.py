@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from torchvision import transforms
 from dataclasses import dataclass
+import torch.nn as nn
 
 def set_seed(seed: int):
   random.seed(seed)
@@ -87,6 +88,7 @@ valid_dataset = NewsGroupsDataset(valid_encodings, valid_labels)
 
 #cpu
 model = BertForSequenceClassification.from_pretrained(model_name, num_labels=len(target_names)).to("cpu")
+model = nn.DataParallel(model,device_ids=[i for i in range(torch.cuda.device_count())]) #auto pic number of gpu
 from sklearn.metrics import accuracy_score
 
 
@@ -108,8 +110,8 @@ def train_model(train_dataset, valid_dataset):
 
   ################change number of epochs for testing to 3 , for actual training 1000
   num_train_epochs=2,
-  per_device_train_batch_size=6,
-  per_device_eval_batch_size=6,
+  per_device_train_batch_size=64,
+  per_device_eval_batch_size=32,
   warmup_steps=500,
   weight_decay=0.01,
   learning_rate=0.0001,
