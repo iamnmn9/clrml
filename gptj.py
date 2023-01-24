@@ -43,8 +43,7 @@ x_train, y_train, x_val, y_val = train_texts, valid_texts, train_labels, valid_l
 
 train_encodings = tokenizer(x_train, truncation=True, padding=True, max_length=max_length)
 valid_encodings = tokenizer(y_train, truncation=True, padding=True, max_length=max_length)
-print("train:",train_encodings)
-print("valid:",valid_encodings)
+
 class NewsGroupsDataset(torch.utils.data.Dataset):
       def __init__(self, encodings, labels):
           self.encodings = encodings
@@ -71,8 +70,7 @@ model = AutoModelForCausalLM.from_pretrained(model_name, num_labels=2)
 model = nn.DataParallel(model,device_ids=[i for i in range(torch.cuda.device_count())]) #auto pic number of gpu
 # model = model.cuda(model.device_ids=[0])
 
-print("train_dataset:",train_dataset)
-print("valid_dataset:",valid_dataset)
+
 from sklearn.metrics import accuracy_score
 
 
