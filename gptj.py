@@ -58,7 +58,9 @@ class NewsGroupsDataset(torch.utils.data.Dataset):
       def __len__(self):
           global len
           return len(self.labels)
-
+if len(train_encodings["input_ids"]) != len(train_labels):
+    print("Error: train_encodings and train_labels have different lengths")
+    exit()
 train_dataset = NewsGroupsDataset(train_encodings, train_labels)
 valid_dataset = NewsGroupsDataset(valid_encodings, valid_labels)
 # print(train_encodings)
